@@ -1,0 +1,17 @@
+# Construye la imagen desde el código local:
+#   docker compose -f docker-compose.dev.yml up -d --build
+name: descarga-musica
+services:
+  descarga-musica:
+    build: .
+    image: descarga-musica:latest
+    container_name: descarga-musica
+    restart: unless-stopped
+    ports:
+      - "8095:8080"
+    environment:
+      APP_USER: "admin"
+      APP_PASSWORD: "cambiame"
+    volumes:
+      - ./data/music:/music
+      - ./data/config:/config

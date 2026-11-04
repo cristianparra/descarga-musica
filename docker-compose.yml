@@ -1,0 +1,41 @@
+name: descarga-musica
+services:
+  descarga-musica:
+    image: ghcr.io/cristianparra/descarga-musica:latest
+    container_name: descarga-musica
+    restart: unless-stopped
+    ports:
+      - "8095:8080"
+    environment:
+      APP_USER: "admin"            # <- cambia el usuario
+      APP_PASSWORD: "cambiame"     # <- cambia la contraseña
+      # SECRET_KEY: ""             # opcional: clave para firmar sesiones
+    volumes:
+      - /DATA/Media/Music:/music                 # carpeta de música (CasaOS)
+      - /DATA/AppData/descarga-musica:/config    # ajustes (y cookies.txt opcional)
+    x-casaos:
+      ports:
+        - container: "8080"
+          published: "8095"
+      volumes:
+        - container: /music
+          source: /DATA/Media/Music
+        - container: /config
+          source: /DATA/AppData/descarga-musica
+
+x-casaos:
+  architectures:
+    - amd64
+    - arm64
+  main: descarga-musica
+  title:
+    es_es: Descarga Música
+    en_us: Descarga Música
+  tagline:
+    es_es: Descarga playlists a MP3 / FLAC
+    en_us: Download playlists to MP3 / FLAC
+  category: Media
+  port_map: "8095"
+  index: /
+  icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/youtube-music.png
+  author: cristianparra
